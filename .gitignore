@@ -1,0 +1,14 @@
+# Antigravity AI Project Junk
+.agent/
+temp_*.js
+*.crx
+*.zip
+*.txt
+!README.md
+!dist/
+!.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
