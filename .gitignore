@@ -1,14 +1,5 @@
-# Antigravity AI Project Junk
+BACKUP_CODE_SACH.txt
+node_modules/
 .agent/
-temp_*.js
-*.crx
-*.zip
-*.txt
-!README.md
-!dist/
-!.gitignore
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
+dist/
+.env
