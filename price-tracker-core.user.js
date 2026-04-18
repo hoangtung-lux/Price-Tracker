@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Price Tracker Engine (CORE)
+// @name         Price Tracker (CORE)
 // @namespace    http://tampermonkey.net/
 // @version      3.0.0
 // @description  Lõi API (Manmanbuy + Gouwudang). Không có giao diện.
@@ -12,6 +12,8 @@
 // @match        *://item.jd.com/*
 // @match        *://detail.tmall.com/*
 // @grant        GM_xmlhttpRequest
+// @updateURL    https://raw.githubusercontent.com/hoangtung-lux/Price-Tracker/main/dist/price-tracker-core.user.js
+// @downloadURL  https://raw.githubusercontent.com/hoangtung-lux/Price-Tracker/main/dist/price-tracker-core.user.js
 // @connect      tool.manmanbuy.com
 // @connect      api.gwdang.com
 // @connect      www.gwdang.com

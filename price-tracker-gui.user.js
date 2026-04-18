@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Price Tracker Interface (GUI)
+// @name         Price Tracker (GUI)
 // @namespace    http://tampermonkey.net/
 // @version      3.0.0
 // @description  Giao diện Premium cho Price Tracker. Kết nối với Price Tracker Engine.
@@ -12,6 +12,8 @@
 // @match        *://item.jd.com/*
 // @match        *://detail.tmall.com/*
 // @require      https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js
+// @updateURL    https://raw.githubusercontent.com/hoangtung-lux/Price-Tracker/main/dist/price-tracker-gui.user.js
+// @downloadURL  https://raw.githubusercontent.com/hoangtung-lux/Price-Tracker/main/dist/price-tracker-gui.user.js
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
