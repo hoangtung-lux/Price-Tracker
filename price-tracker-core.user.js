@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Price Tracker (CORE)
 // @namespace    http://tampermonkey.net/
-// @version      3.0.0
+// @version      3.1.0
 // @description  Lõi API (Manmanbuy + Gouwudang). Không có giao diện.
 // @author       Antigravity
 // @match        *://*.taobao.com/*
@@ -24,74 +24,104 @@
     'use strict';
 
     /**
-     * CORE ENGINE OBJECT
-     * Exposes API methods to the global window object for the GUI script to consume.
+     * CONFIGURATION
+     */
+    const CONFIG = {
+        GWD_API: "https://api.gwdang.com/extension/price_towards",
+        MMB_API: "https://tool.manmanbuy.com/history.aspx",
+        REFERERS: {
+            GWD: "https://www.gwdang.com/",
+            MMB: "https://tool.manmanbuy.com/"
+        }
+    };
+
+    /**
+     * PRICE TRACKER ENGINE
+     * Decoupled headless logic for fetching price history from multiple sources.
      */
     window.VHPriceTrackerCore = {
-        currentData: { mmb: [], gwd: [] },
-        onDataReceived: null, // Callback function (source, data)
+        dataStore: { mmb: [], gwd: [] },
+        onData: null,
 
         /**
-         * Lấy ID phân loại hàng (SKU) cho Taobao/Tmall
+         * Resolves the canonical product URL, including SKU mapping for Taobao/Tmall.
          */
-        getIdentity: function() {
+        resolveProductUrl() {
             let url = window.location.href;
             try {
-                if (window.Hub && window.Hub.config && window.Hub.config.get('sku')) {
-                    const skuId = window.Hub.config.get('sku').skuId;
+                const hub = window.Hub;
+                if (hub?.config && hub.config.get('sku')) {
+                    const skuId = hub.config.get('sku').skuId;
                     const itemId = new URLSearchParams(window.location.search).get('id');
-                    if (skuId && itemId) url = `https://sku-taobao.com/item.htm?id=${itemId}-${skuId}`;
+                    if (skuId && itemId) {
+                        url = `https://sku-taobao.com/item.htm?id=${itemId}-${skuId}`;
+                    }
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.warn("[Core] Identity resolution failed:", e);
+            }
             return url;
         },
 
         /**
-         * Gọi đồng thời cả 2 nguồn
+         * Triggers data fetching for all enabled engines.
+         * @param {Function} callback - Function(source, historyData)
          */
-        fetchAll: function(callback) {
-            this.onDataReceived = callback;
-            const targetUrl = this.getIdentity();
-            this.fetchGwd(targetUrl);
-            this.fetchMmb(targetUrl);
+        startTracking(callback) {
+            this.onData = callback;
+            const targetUrl = this.resolveProductUrl();
+            
+            this.fetchSource('gwd', targetUrl);
+            this.fetchSource('mmb', targetUrl);
         },
 
-        fetchGwd: function(url) {
+        /**
+         * Internal fetcher with source-specific normalization.
+         */
+        fetchSource(source, targetUrl) {
+            const isGwd = (source === 'gwd');
+            const apiUrl = isGwd 
+                ? `${CONFIG.GWD_API}?url=${encodeURIComponent(targetUrl)}&ver=1`
+                : `${CONFIG.MMB_API}?DA=1&action=gethistory&url=${encodeURIComponent(targetUrl)}`;
+
             GM_xmlhttpRequest({
                 method: "GET",
-                url: `https://api.gwdang.com/extension/price_towards?url=${encodeURIComponent(url)}&ver=1`,
-                headers: { "Referer": "https://www.gwdang.com/" },
+                url: apiUrl,
+                headers: { "Referer": isGwd ? CONFIG.REFERERS.GWD : CONFIG.REFERERS.MMB },
                 onload: (res) => {
-                    try {
-                        const data = JSON.parse(res.responseText);
-                        const history = data.store[0].all_line.map(i => [new Date(i[0]).getTime(), parseFloat(i[1])]);
-                        this.currentData.gwd = history;
-                        if (this.onDataReceived) this.onDataReceived('gwd', history);
-                    } catch (e) {}
+                    if (res.status !== 200) return;
+                    
+                    const history = isGwd 
+                        ? this.parseGwd(res.responseText) 
+                        : this.parseMmb(res.responseText);
+
+                    if (history && history.length > 0) {
+                        this.dataStore[source] = history;
+                        this.onData?.(source, history);
+                    }
                 }
             });
         },
 
-        fetchMmb: function(url) {
-            GM_xmlhttpRequest({
-                method: "GET",
-                url: `https://tool.manmanbuy.com/history.aspx?DA=1&action=gethistory&url=${encodeURIComponent(url)}`,
-                headers: { "Referer": "https://tool.manmanbuy.com/" },
-                onload: (res) => {
-                    const match = res.responseText.match(/strDate\s*=\s*"(.*?)";/);
-                    if (match) {
-                        const history = match[1].split('#').filter(x => x).map(point => {
-                            const [time, price] = point.split('|');
-                            return [parseInt(time), parseFloat(price)];
-                        });
-                        this.currentData.mmb = history;
-                        if (this.onDataReceived) this.onDataReceived('mmb', history);
-                    }
-                }
+        parseGwd(jsonStr) {
+            try {
+                const data = JSON.parse(jsonStr);
+                return data.store?.[0]?.all_line?.map(i => [
+                    new Date(i[0]).getTime(), 
+                    parseFloat(i[1])
+                ]) || [];
+            } catch { return []; }
+        },
+
+        parseMmb(html) {
+            const match = html.match(/strDate\s*=\s*"(.*?)";/);
+            if (!match) return [];
+            return match[1].split('#').filter(Boolean).map(point => {
+                const [time, price] = point.split('|');
+                return [parseInt(time), parseFloat(price)];
             });
         }
     };
 
-    console.log("[PriceTrackerCore] Engine v3.0 loaded and ready.");
-
+    console.info("[PriceTracker] Core Engine initialized.");
 })();

@@ -4,76 +4,84 @@ import re
 
 # --- CONFIGURATION ---
 SOURCE_FILES = ["price-tracker-core.user.js", "price-tracker-gui.user.js"]
-DIST_DIR = "dist"
+OUTPUT_DIR = "dist"
 OBFUSCATOR_CMD = "npx javascript-obfuscator"
 
-# Obfuscation settings (Strong but stable)
-OBFUSCATION_OPTIONS = [
+# Security Settings for Obfuscation
+OBFUSCATION_SETTINGS = [
     "--compact", "true",
-    "--control-flow-flattening", "false", # Keep false for performance/stability unless requested
-    "--dead-code-injection", "false",
-    "--debug-protection", "false",
-    "--disable-console-output", "false",
+    "--control-flow-flattening", "false",
     "--identifier-names-generator", "hexadecimal",
-    "--rename-globals", "false",          # Keep false to avoid breaking external APIs (GM_ xmlhttpRequest)
+    "--rename-globals", "false",
     "--string-array", "true",
     "--string-array-encoding", "base64",
     "--string-array-threshold", "1"
 ]
 
-def ensure_dist():
-    if not os.path.exists(DIST_DIR):
-        os.makedirs(DIST_DIR)
-        print(f"Created {DIST_DIR} directory.")
+def clean_dist():
+    """Ensure the output directory exists and is ready."""
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+        print(f"[Build] Created directory: {OUTPUT_DIR}")
 
-def obfuscate_file(filename):
-    print(f"\n--- Processing: {filename} ---")
+def process_file(source_name):
+    """Obfuscate script body while preserving metadata header."""
+    print(f"\n[Build] Protection started: {source_name}")
     
-    with open(filename, "r", encoding="utf-8") as f:
+    if not os.path.exists(source_name):
+        print(f"[Error] Source not found: {source_name}")
+        return
+
+    with open(source_name, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # 1. Extract Metadata Block
-    meta_match = re.search(r"(// ==UserScript==.*?// ==/UserScript==)", content, re.DOTALL)
-    if not meta_match:
-        print(f"Error: No UserScript metadata found in {filename}")
+    # Split metadata and body
+    meta_boundary = "// ==/UserScript=="
+    if meta_boundary not in content:
+        print(f"[Error] Invalid metadata in {source_name}")
         return
 
-    metadata = meta_match.group(1)
-    body = content.replace(metadata, "")
+    meta_parts = content.split(meta_boundary)
+    metadata = meta_parts[0] + meta_boundary
+    body = meta_parts[1]
 
-    # 2. Save body to temp file for obfuscator
-    temp_body = "temp_body.js"
-    temp_obf = "temp_obf.js"
-    with open(temp_body, "w", encoding="utf-8") as f:
+    temp_input = "temp_src.js"
+    temp_output = "temp_obf.js"
+    
+    with open(temp_input, "w", encoding="utf-8") as f:
         f.write(body)
 
-    # 3. Run Obfuscator
-    print(f"Running obfuscator on {filename} body...")
-    cmd = [OBFUSCATOR_CMD, temp_body, "--output", temp_obf] + OBFUSCATION_OPTIONS
+    # Execute obfuscator
+    build_cmd = f"{OBFUSCATOR_CMD} {temp_input} --output {temp_output} " + " ".join(OBFUSCATION_SETTINGS)
     try:
-        subprocess.run(" ".join(cmd), shell=True, check=True)
+        subprocess.run(build_cmd, shell=True, check=True, capture_output=True)
+        
+        with open(temp_output, "r", encoding="utf-8") as f:
+            protected_body = f.read()
+
+        # Combine and Save
+        final_script = metadata + "\n\n" + protected_body
+        output_path = os.path.join(OUTPUT_DIR, source_name)
+        
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(final_script)
+            
+        print(f"[Build] Protection success: {output_path}")
+
     except subprocess.CalledProcessError as e:
-        print(f"Obfuscation failed: {e}")
-        return
-
-    # 4. Combine Metadata + Obfuscated Body
-    with open(temp_obf, "r", encoding="utf-8") as f:
-        obfuscated_body = f.read()
-
-    final_content = metadata + "\n\n" + obfuscated_body
+        print(f"[Error] Obfuscation failed for {source_name}")
+        if e.stderr: print(e.stderr.decode())
     
-    output_path = os.path.join(DIST_DIR, filename)
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(final_content)
+    finally:
+        # Cleanup
+        for temp in [temp_input, temp_output]:
+            if os.path.exists(temp): os.remove(temp)
 
-    # 5. Cleanup
-    if os.path.exists(temp_body): os.remove(temp_body)
-    if os.path.exists(temp_obf): os.remove(temp_obf)
-
-    print(f"Success! Protected script saved to: {output_path}")
+def run_build():
+    clean_dist()
+    for source in SOURCE_FILES:
+        process_file(source)
+    print("\n[Build] All tasks completed successfully.")
 
 if __name__ == "__main__":
-    ensure_dist()
-    for f in SOURCE_FILES:
-        obfuscate_file(f)
-    print("\nAll scripts protected successfully.")
+    run_build()
