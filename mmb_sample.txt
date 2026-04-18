@@ -1,0 +1,1271 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="ctl00_Head1"><title>
+	查询商品历史价格走势（支持京东，天猫，淘宝等）APP - 慢慢买
+</title><link rel="icon" type="image/vnd.microsoft.icon" href="//misc.manmanbuy.com/images/favicon.ico" /><meta http-equiv="content-language" content="zh-CN" /><meta content="历史价格查询" name="Keywords" /><meta content="历史价格查询能让你快速了解网购商品的历史价格走势，识别虚假促销，不花冤枉钱。目前支持淘宝、京东、拼多多等主流电商的商品历史价格查询。" name="Description" />
+<script type="text/javascript" src="/Scripts/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/Scripts/sitetool.js"></script>
+<link rel="stylesheet" href="//include.manmanbuy.com/css/style.css" type="text/css" /><link rel="stylesheet" href="//include.manmanbuy.com/css/headfoot.css" type="text/css" /><link rel="stylesheet" href="/Scripts/sitetool.css" type="text/css" />
+    <script src="https://mmbres.manmanbuy.com/pc_tool/customRequest.js" type="text/javascript"></script>
+     <script src="layui/layui.js?v=20230511" type="text/javascript"></script>
+     <script src="layui/lay/modules/layer.js?v=20230511" type="text/javascript"></script>
+    <script src="Scripts/histroyTrend.js?v=20230925" type="text/javascript"></script>
+    <script src="Scripts/histroyTrendExtend.js?v=20251029_24" type="text/javascript"></script>
+    <script src="https://mmbres.manmanbuy.com/pc_tool/siteDiscount.js" type="text/javascript"></script>
+    <script src="https://mmbres.manmanbuy.com/pc_tool/echarts.js" type="text/javascript"></script>
+    <script src="https://mmbres.manmanbuy.com/pc_tool/echartsTrend.js" type="text/javascript"></script>
+
+   
+ 
+    <link href="layui/css/layui.css?v=20201116" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="/Scripts/bijia.css?v=20220317" type="text/css" />
+    <link rel="stylesheet" href="/Scripts/history.css?v=20251029_1" type="text/css" />
+    <style>.head-search{display:none !important;}</style>
+    <script src="Scripts/jquery.qrcode.js" type="text/javascript"></script>
+    <script src="Scripts/qrcode.js" type="text/javascript"></script>
+    <script src="Scripts/utf.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="https://home.manmanbuy.com/js/pcCrawling.js"></script>
+
+    <script src='http://include.manmanbuy.com/js/tixings11_pc.js?20181212' type='text/javascript'></script>
+    
+</head>
+<body id="Body1" >
+
+ <style type="text/css">
+span.my-mmb a:hover,span.my-helper a:hover,span.mmb-app a:hover{TEXT-DECORATION: underline;Color: #ee7000;}
+.top-right .mmb-app a,.top-right .mmb-app .qrcode .qr-img,.top-right .mmb-app .qrcode .qr-btn a{ background:url(//adimages.manmanbuy.com//newindexpic/m.m.c/nav_app_icon.gif) no-repeat;}
+.top-right .mmb-app{ margin-right:0px; padding:0px;display: inline-block;padding: 0;position: relative;z-index: 2;vertical-align: middle;}
+.top-right .mmb-app a{ display:inline-block; padding-left:16px; background-position:-128px 2px;z-index:6;*top:31px;_top:30px;}
+.top-right .mmb-app .qr-tit{ display:inline-block;padding: 0 20px 0 5px;color: #555;background: url(//misc.manmanbuy.com/images/cart/arrow.gif) right 10px no-repeat;border-bottom: none;float: left; height:27px; line-height:27px;}
+.top-right .mmb-app .qrcode{ background:#FFFFFF; border:1px solid #dcdcdc; padding:10px; width:230px; display:none; position:absolute;  left:0; top:30px;margin-top:-5px;}
+.top-right .mmb-app .line{height:1px; width:99px; background:#fff; line-height:0; font-size:0; position:absolute;top:25px;*top:25px;left:1px;_top:25px;z-index:7;display:none; }
+.top-right .mmb-app .qrcode p{ color:#999999;margin: 0px;}
+.top-right .mmb-app .qrcode p b{ color:#5a5a5a;}
+.top-right .mmb-app .qrcode .qr{ margin-top:4px; height:110px;}
+.top-right .mmb-app .qrcode .qr-img{ width:106px; height:106px; background-position:0 0;float: left; margin-right:10px;}
+.top-right .mmb-app .qrcode .qr-btn{ padding-left:116px;}
+.top-right .mmb-app .qrcode .qr-btn a.a-iphone,.top-right .mmb-app .qrcode .qr-btn a.a-android{ display:block; width:104px; height:28px; padding:0px; margin:10px 0px;}
+.top-right .mmb-app .qrcode .qr-btn a.a-iphone{background-position:0px -122px;}
+.top-right .mmb-app .qrcode .qr-btn a.a-android{ background-position:0px -157px;}
+.top-right span.spanjj{padding:0px;font-size: 9px;color: #dddddd;}
+.top-right a.pt{margin-left:10px;}
+span.my-mmb,span.my-helper{display:inline-block; padding:0; position:relative; z-index:2; vertical-align:middle; height:27px; line-height:27px;}
+span.my-mmb div,span.my-helper div{ color:#555; padding:0 20px 0 10px;background:url(//misc.manmanbuy.com/images/cart/arrow.gif) right 10px no-repeat; display:inline-block; border-bottom:none;float:left; }
+span.my-mmb:hover,span.my-helper:hover{cursor:pointer;}
+span.my-mmb dl,span.my-helper dl{ position:absolute; background:#fff; border:1px solid #DCDCDC;display:none;padding:1px 0px 3px 0px;line-height:24px; right:0; top:30px; margin-top:-5px;z-index:6;*top:31px;_top:30px;}
+span.my-mmb dl dd,span.my-helper dl dd{ padding:0px 9px 0px 9px; height:25px;line-height:25px;margin:0px;}
+span.my-mmb dl a,span.my-helper dl a{ font-weight:normal; line-height:22px; white-space:nowrap;}
+span.my-mmb .line{ height:1px; background:#fff; line-height:0; font-size:0; position:absolute; top:25px;*top:26px;_top:25px;right:1px;z-index:7; display:none;}
+span.my-helper .line{ height:1px; width:100px; background:#fff; line-height:0; font-size:0; position:absolute;top:25px;*top:26px;right:1px;_top:25px;z-index:7;display:none; }
+.proFl .title span{ font-size:14px !important; font-weight:normal !important;}
+#menutemai{ position:relative;}
+#menutemai img.icon-new{ position:absolute; top: 9px;left: 74px;}
+#menucuxiao{ margin-left:7px;}
+#menutemai{ margin-left:15px;}
+#menubaicai{ margin-left:15px;}
+#menufanli{ margin-left:20px;}
+#menucomment{ margin-left:14px;}
+.menudiv3{ width:110px;padding-top: 0px;height: 39px; line-height:39px;}
+A.menu:link, A.menu:active, A.menu:visited{font-weight:normal; font-size:15px;}
+#menupinpai a,#menujifen a{font-weipight:normal; font-size:15px;}
+
+</style>
+
+
+<!--新的搜索-->
+<style type="text/css">
+.head-search{float:right; padding: 15px 0px 8px 0px;width: 620px; text-align: left; *padding-top: 20px; *position:relative; *z-index:1;}
+.head-search .tabs{ height: 20px; }
+.head-search .tabs ul li{float: left; width: 50px; height: 25px;}
+.head-search .tabs ul li a{ display:block; color: #F40; text-align: center; line-height: 25px;}
+.head-search .tabs ul li a:hover{text-decoration: none; background-color: #FFEEE5;}
+.head-search .tabs ul li.on a{ color: #ffffff; background-color: #f9513b;}
+.head-search .panel {
+    padding: 2px 0 2px 2px;
+    height: 34px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+.head-search .panel .panelLeft {
+    position: relative;
+    box-sizing: border-box;
+    width: 456px;
+    height: 38px;
+    padding: 2px 0 2px 2px;
+    margin-right: 20px;
+    background-color: #ee4d2d;
+    border-radius: 6px;
+}
+.head-search .panel .sInput {
+    position: relative;
+    width: 370px;
+    border-radius: 6px;
+}
+.head-search .panel .sInput label{line-height: 22px; position: absolute; top: 6px; left: 11px; color: #a9a9a9; height: 0px; cursor: text;touch-action: none; -ms-touch-action: none; pointer-events: none; -ms-pointer-events: none; -webkit-user-select: none;}
+.head-search .panel .sInput input.skey {
+    border: none;
+    padding: 6px 0;
+    text-indent: 10px;
+    height: 22px;
+    line-height: 22px;
+    width: 100%;
+    outline: 0;
+    background: #fff;
+    -webkit-appearance: none;
+    display: block;
+    font-family: 'Microsoft Yahei';
+    color: #5a5a5a;
+    font-size: 12px;
+    border-radius: 4px;
+}
+.head-search .panel .sBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 82px;
+    height: 38px;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 6px;
+}
+.head-search .panel .sBtn input.btnSearch{font-size: 18px; font-weight: 700; color: #ffffff; background-color: #f9513b; cursor: pointer; height: 100%; border: none; width: 100%; outline: 0;-webkit-appearance: none; *line-height:34px;}
+.head-search .panel .panelRight {
+        box-sizing: border-box;
+        width: 100px;
+        height: 38px;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 38px;
+        color: #ee4d2d;
+        text-align: center;
+        border: 1px solid #ee4d2d;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+.head-search .tags {
+        margin-top: 2px;
+        color: #666;
+        line-height: 22px;
+        height: 22px;
+        overflow: hidden;
+    }
+.head-search .tags span{ color: #666;}
+.head-search .tags a{ margin-right: 1px; color: #666;}
+.head-search .tags a:hover{color: #f85000; text-decoration: none;}
+.head-search .tags a.hot{color: #f85000;}
+.head-search-bijia .tags-zhekou,.head-search-zhekou .tags-bijia{ display: none;}
+.head-search-bijia .tags-bijia,.head-search-zhekou .tags-zekou{ display: block;}
+.head-search-bijia ul li.tab-bijia a,
+.head-search-zhekou ul li.tab-zhekou a{ color: #ffffff;background-color: #f9513b !important;}
+.main-navi{background-color: #333333;}
+</style>
+
+<script type="text/javascript">
+$(function () {
+    ;(function ($) {
+        $.searchHolder=function(searchTip) {
+            $.event.special.valuechange = {
+                teardown: function (namespaces) {
+                    $(this).unbind('.valuechange');
+                },
+                handler: function (e) {
+                    $.event.special.valuechange.triggerChanged($(this));
+                },
+                add: function (obj) {
+                    $(this).on('keyup.valuechange cut.valuechange paste.valuechange input.valuechange', obj.selector, $.event.special.valuechange.handler)
+                },
+                triggerChanged: function (element) {
+                    var current = element[0].contentEditable === 'true' ? element.html() : element.val(),
+                        previous = typeof element.data('previous') === 'undefined' ? element[0].defaultValue : element.data('previous')
+                    if (current !== previous) {
+                        element.trigger('valuechange', [element.data('previous')])
+                        element.data('previous', current)
+                    }
+                }
+            }
+            $('.head-search .panel .sInput .skey').on('valuechange', function (e, previous) {
+                if ($(this).val() != '' && $(this).val()) {
+                    $('.head-search .panel .sInput label').text('');
+                } else {
+                    $('.head-search .panel .sInput label').text(searchTip);
+                }
+            });
+            if ($('.head-search .panel .sInput .skey').val() != '') {
+                return;
+            } else {
+                $('.head-search .panel .sInput label').text(searchTip);
+            }
+        }
+    })(jQuery);
+
+    $.searchHolder($('.head-search .panel form .skey').attr('data-zekou'));
+    $('.head-search .tabs ul li').each(function (eq) {
+        $(this).click(function () {
+            $('.head-search .panel form').removeAttr('action');
+            if (eq == 0) {
+                $('.head-search .panel form').attr('action', '//zhekou.manmanbuy.com/searchnew.aspx');
+                $.searchHolder($('.head-search .panel form .skey').attr('data-zekou'));
+                $('.head-search').removeClass('head-search-bijia').addClass('head-search-zhekou');
+            } else {
+                $('.head-search .panel form').attr('action', '//s.manmanbuy.com/Default.aspx');
+                $.searchHolder($('.head-search .panel form .skey').attr('data-bijia'));
+                $('.head-search').removeClass('head-search-zhekou').addClass('head-search-bijia');
+            }
+        });
+    });
+    $(".panel form").submit(function (e) {
+if ($('.head-search .panel .sInput .skey').val()==''){
+        if ($('.head-search').hasClass('head-search-bijia')) {
+            $('.head-search .panel .sInput .skey').val($('.head-search .panel form .skey').attr('data-bijia'));
+        } }
+        return true;
+    });
+	
+	 $('.head-search .panelRight').click(function () {
+		var skey = $('.head-search .panel form .skey').val();
+		if (skey && skey.indexOf('http') > -1) {
+			// 到详情页
+			location.href = '//tool.manmanbuy.com/HistoryLowest.aspx?url=' + encodeURIComponent(skey);
+		} else {
+			// 到首页
+			location.href = '//tool.manmanbuy.com/HistoryLowest.aspx';
+		}
+	});
+})
+</script>
+
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+
+	$("span.my-mmb").hover(function() {
+		$(this).find("p.line").width(88).show();
+		$(this).find("dl").width(88).show();
+		$(this).css("background","#fff url(//misc.manmanbuy.com/images/cart/arrowL.gif) left  -4px no-repeat");
+		$(this).find('div').css("background","url(//misc.manmanbuy.com/images/cart/arrowR.gif) right  -4px no-repeat");
+	}, function() {
+		$(this).find("p.line").hide();
+		$(this).find("dl").hide();
+		$(this).css("background","none");
+		$(this).find('div').css("background","url(//misc.manmanbuy.com/images/cart/arrow.gif) right 10px no-repeat");
+	});
+	$("span.my-helper").hover(function() {
+		$(this).find("p.line").width(100).show();
+		$(this).find("dl").width(100).show();
+		$(this).css("background","#fff url(//misc.manmanbuy.com/images/cart/arrowL.gif) left  -4px no-repeat");
+		$(this).find('div').css("background","url(//misc.manmanbuy.com/images/cart/arrowR.gif) right  -4px no-repeat");
+	}, function() {
+		$(this).find("p.line").hide();
+		$(this).find("dl").hide();
+		$(this).css("background","none");
+		$(this).find('div').css("background","url(//misc.manmanbuy.com/images/cart/arrow.gif) right 10px no-repeat");
+	});
+$("span.mmb-app").hover(function() {
+	$(this).find("p.line").show();
+	$(this).find(".qrcode").show();
+	$(this).css("background","#fff url(//misc.manmanbuy.com/images/cart/arrowL.gif) left  -4px no-repeat");
+	$(this).find('div.qr-tit').css("background","url(//misc.manmanbuy.com/images/cart/arrowR.gif) right  -4px no-repeat");
+}, function() {
+	$(this).find("p.line").hide();
+	$(this).find(".qrcode").hide();
+	$(this).css("background","none");
+	$(this).find('div.qr-tit').css("background","url(//misc.manmanbuy.com/images/cart/arrow.gif) right 10px no-repeat");
+});
+
+});
+</script>
+
+
+<div class="main-topbar" style="width: 100%; height: 27px;line-height: 27px; border-bottom: solid 1px #DCDCDC; background-color:#fbfbfb;"             align="center">
+
+<div style="width: 994px; text-align: left;">
+<div style="float: left; width:360px;">
+<div >欢迎来到慢慢买！<a href="javascript:;" onclick="if(typeof loginShow==='function'){loginShow('login')}else{location.href='http://home.manmanbuy.com/login.aspx?tourl=https%3a%2f%2ftool.manmanbuy.com%2fHistoryLowest.aspx'}" class="pt">请登录</a> &nbsp;   <a href="javascript:;" onclick="if(typeof loginShow==='function'){loginShow('register')}else{location.href='https://home.manmanbuy.com/reg.aspx'}" class="pt">免费注册</a></div></div>
+<div style="float: right;color: #666;">
+<div class="top-right">
+	<span class="mmb-app">
+	<div class="qr-tit"><a href="//home.manmanbuy.com/app.aspx">手机慢慢买</a></div>
+	<p class="line"></p>
+	<div class="qrcode">
+	  <p>扫描二维码下载客户端</p>
+	  <div class="qr">
+		<div class="qr-img"></div>
+		<div class="qr-txt">
+		  <p><b>慢慢买客户端</b></p>
+		  <div class="qr-btn"> <a href="//itunes.apple.com/cn/app/man-man-mai-bi-jia-wang-rang/id933106331?l=en&mt=8" target="_blank" class="a-iphone" title="iPhone版下载"></a> <a href="//sj.qq.com/myapp/detail.htm?apkName=com.manmanbuy.bijia" class="a-android" title="Android版下载"></a> </div>
+		</div>
+	  </div>
+	</div>
+</span>
+	<span class="spanjj">|</span>	
+	<span class="my-mmb"><div><a href="//home.manmanbuy.com/userCenter.aspx">我的慢慢买</a></div>
+	<p class="line"></p>
+		<dl>
+<dd><a href="//home.manmanbuy.com/fac.aspx">我的收藏</a></dd>
+<dd><a href="//home.manmanbuy.com/jifenHistory.aspx">我的积分</a></dd>
+		</dl>
+	</span>
+
+	<span class="spanjj">|</span><a href="//help.manmanbuy.com/default.aspx?id=44069" target="_blank"  class="pt">新手帮助</a>
+</div>
+</div>
+</div></div>
+<!--headend--><div class="clear"></div>
+
+
+
+<div class="main-header" style="width: 100%;background-color:#fff;height:115px;">
+<div style="width: 1000px; margin: 0px auto; text-align: center;"><div style="width: 994px; margin:0px; height:100px;"><div style="float: left; width: 170px; text-align: left;margin-top:20px;"><a href="//www.manmanbuy.com/"><img src="//include.manmanbuy.com/images/logo2019.png" alt="慢慢买比价网——理性消费倡导者" style="width:175px;"></a></div>
+<div style="float: left; width: 170px; text-align: left;margin-top: 40px;margin-left:10px;">
+<a href='//tool.manmanbuy.com' style="font-size:26px;color: #555;font-weight: normal;font-family: Microsoft Yahei;text-decoration: none;">查历史价</a></div>
+
+
+
+<div class="head-search head-search-zhekou">
+	<div class="tabs">
+		<ul>
+			
+		</ul>
+	</div>
+	<div class="panel">
+		<div class="panelLeft">
+			<form action="//s.manmanbuy.com/pc/search/result" method="get" accept-charset="utf-8" onsubmit="return checkSearch()">
+				<div class="sInput"><label for="skey"></label><input type="text" name="keyword" id="skey" class="skey" style='width:575px;' value="" autocomplete="off" data-bijia="请输入您想比较的商品名称或型号" data-zekou="请输入您想找的商品折扣"></div>
+				<div class="sBtn"><input type="submit" value="搜索" name="btnSearch" class="btnSearch"></div>
+			</form>
+		</div>
+		<div class="panelRight">查历史价</div>
+	</div>
+	<div class="tags tags-bijia">热门比价：<a href="https://s.manmanbuy.com/Default.aspx?key=华凌空调" class="f12hui">华凌空调</a>  &nbsp;
+<a href="https://s.manmanbuy.com/Default.aspx?key=扫地机器人" class="f12hui">扫地机器人</a>  &nbsp;
+<a href="https://s.manmanbuy.com/Default.aspx?key=小米手机" class="f12hui">小米手机</a>  &nbsp;
+<a href="https://s.manmanbuy.com/default.aspx?key=Nintendo+Switch&hot=1" class="f12hui">Nintendo Switch</a>  &nbsp;
+<a href="https://s.manmanbuy.com/Default.aspx?key=蓝牙耳机" class="f12hui">蓝牙耳机</a>  &nbsp;
+<a href="https://s.manmanbuy.com/default.aspx?key=airpods pro&hot=1" class="f12hui">airpods pro</a>  &nbsp;
+<a href="https://s.manmanbuy.com/Default.aspx?key=小米平板&hot=1" class="f12hui">小米平板</a> 
+	</div>
+    <div class="tags tags-zhekou">
+        热门搜索：
+<a href="https://s.manmanbuy.com/pc/search/result?c=discount&keyword=iphone%2017" class="f12hui">iphone 17</a>  &nbsp;
+<a href="https://s.manmanbuy.com/pc/search/result?c=discount&keyword=%E5%8D%8E%E5%87%8C%E7%A9%BA%E8%B0%83" class="f12hui">华凌空调</a>  &nbsp;
+<a href="https://s.manmanbuy.com/pc/search/result?c=discount&keyword=%E6%89%AB%E5%9C%B0%E6%9C%BA%E5%99%A8%E4%BA%BA" class="f12hui">扫地机器人</a>  &nbsp;
+<a href="https://s.manmanbuy.com/pc/search/result?c=discount&keyword=%E7%BB%B4%E8%BE%BE" class="f12hui">维达</a>  &nbsp;
+<a href="https://s.manmanbuy.com/pc/search/result?c=discount&keyword=Nintendo%20Switch" class="f12hui">Nintendo Switch</a>  &nbsp;
+<a href="https://s.manmanbuy.com/pc/search/result?c=discount&keyword=%E8%93%9D%E7%89%99%E8%80%B3%E6%9C%BA" class="f12hui">蓝牙耳机</a>
+    </div>
+</div>
+
+<script>
+function checkSearch() {
+    // 获取输入框元素
+    const skeyInput = document.getElementById('skey');
+    // 去除输入值前后的空格
+    const keyword = skeyInput.value;
+    
+    // 判断是否为空
+    if (keyword === '') {
+        // 聚焦到输入框，方便用户输入
+        skeyInput.focus();
+        // 返回false阻止表单提交
+        return false;
+    }
+    // 输入不为空，允许表单提交
+    return true;
+}
+</script>
+
+
+
+</div><div class="clear"></div></div> </div><div class="main-navi" style="width:100%; background-color:#f9513b; height:40px;" id="webindexmenu">
+     <div style="width:994px;margin: 0px auto; text-align: center;">
+     <div style="margin:0px;"><div class="menudiv3" id="menuindex"><a href="https://www.manmanbuy.com" class="menu">首页</a></div>
+<div class="menudiv3"   id="menutool"><a href="https://tool.manmanbuy.com/HistoryLowest.aspx" class="menu">查历史价</a></div>
+<div class="menudiv3"  id="menucuxiao"><a href="https://cu.manmanbuy.com/" class="menu">精选折扣</a></div>
+<div class="menudiv3" id="menuzhekou"><a href="https://zhekou.manmanbuy.com/" class="menu">全网折扣</a></div>
+<!--
+<div class="menudiv3" id="menubijia"><a href="https://home.manmanbuy.com/bijia.aspx" class="menu">全网比价</a></div>
+<div class="menudiv3"  id="menubaicai"><a href="https://baicai.manmanbuy.com/" class="menu">白菜价</a></div>
+-->
+
+
+
+
+
+<div style="float:right;padding-top:11px;height: 29px;width:120px;line-height:18px; text-align:center; " id="menupinpai"><a href="https://home.manmanbuy.com/app.aspx" target="_blank" style="font-size: 14px;font-weight: normal;Color: #ffffff; background-position:0px 0px; background-repeat:no-repeat; padding-left:20px; display:inline-block;">比价APP下载</a></div>
+<div style="float:right;padding-top:11px;height: 29px;width:120px;line-height:18px; text-align:center; " id="menupinpai"><a href="https://cu.manmanbuy.com/submitBaoliao.aspx" target="_blank" style="font-size: 14px;font-weight: normal;Color: #ffffff; background-position:0px 0px; background-repeat:no-repeat; padding-left:20px; display:inline-block;">爆料赚金币</a></div></div><div class="clear"></div></div></div>
+
+<style type="text/css">
+@font-face {font-family: "iconfont"; src: url('//static.manmanbuy.com/resources/public/iconfont/iconfont.eot?t=1463617611');src: url('//static.manmanbuy.com/resources/public/iconfont/iconfont.eot?t=1463617611#iefix') format('embedded-opentype'),url('//static.manmanbuy.com/resources/public/iconfont/iconfont.woff?t=1463617611') format('woff'),url('//static.manmanbuy.com/resources/public/iconfont/iconfont.ttf?t=1463617611') format('truetype'),url('//static.manmanbuy.com/resources/public/iconfont/iconfont.svg?t=1463617611#iconfont') format('svg');}
+.mmb-iconfont {font-family:"iconfont" !important;font-size:16px;font-style:normal;-webkit-font-smoothing: antialiased;-webkit-text-stroke-width: 0.2px; -moz-osx-font-smoothing: grayscale;}
+A.menu:link, A.menu:active, A.menu:visited {font-size: 16px;line-height: 42px;}
+.main-menu-more{ width: 88px;    position: relative;}
+.main-menu-more a.m-a{ color:#ffffff; font-size:16px; line-height:40px; text-decoration: none;display: block;height: 40px; padding:0px 20px;}
+.main-menu-more a.m-a:hover{border-bottom: 0px solid #e63b0d; line-height: 40px; height: 37px; overflow: hidden;}
+.main-menu-more a.a-hassub{border:1px solid #f9513b; border-bottom: none; height: 39px; line-height: 37px;}
+.main-menu-more .sub{ display: none; padding: 5px 0; background-color: #ffffff; position: absolute;z-index:999;left:0px; border: 1px solid #ededed;border-top:none;}
+.main-menu-more .sub dl{margin:0px;padding:0px;}
+.main-menu-more .sub dl dd{margin:0px;padding:0px;}
+.main-menu-more .sub a.s-a{ display: block; padding: 0 20px; line-height: 35px; color: #666; white-space: nowrap; font-size: 14px; text-align: left;}
+.main-menu-more .sub a.s-a:hover{ background-color: #eeeeee;text-decoration: none;}
+.main-menu-more.on .sub{display: block;}
+.main-menu-more.on a.m-a{border-bottom: 0px solid #e63b0d; line-height: 40px; height: 37px; overflow: hidden;}
+.main-menu-more.on a.a-hassub{background-color:#ffffff; color:#f9513b;border:1px solid #ededed; margin-top:2px; border-bottom:none; line-height: 35px;}
+</style>
+<script type="text/javascript">
+$(function() {
+    $('.main-menu-more').hover(function() {
+    	$(this).addClass('on');
+    	$(this).find('.mmb-iconfont').html('&#xe62b;');
+    }, function() {
+		$(this).removeClass('on');
+		$(this).find('.mmb-iconfont').html('&#xe62a;');
+    });
+})
+</script>
+        <script type="text/javascript">
+            $("#menutool").removeClass("menudiv2");
+            $("#menutool").addClass("menudiv2d"); //selected
+        </script>
+    
+<div class="breadcrumbs">
+  <div class="w">
+    <div class="fl crumbs"><a href="http://www.manmanbuy.com/">比价网</a><small>&gt;</small>
+    <a href="//tool.manmanbuy.com/">省钱购物助手</a><small>&gt;</small>
+    
+    历史价格查询
+</div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+
+ <script type="text/javascript">
+     $("#mlsjg").addClass("on");
+</script>
+    
+<div class="container">
+  <div id="toolbox">
+
+
+           
+            
+
+    
+
+    <div class="titleheadRight">
+        <div style="float: left; width: 400px; height: 60px;">
+            <h1 class="titlebackdi">查商品历史价格走势
+            </h1>
+        </div>
+       <div style="float: right; width: 380px; height: 60px; margin-left: 15px;">
+            <div style="float: right;width: 250px;text-align: right;/* margin-top: 8px; */padding: 30px 10px;">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAPxJREFUWEftV8ENgzAQczYpUgbIBi2TFSYr3YABkOgmqVxBhSJyB0mlfi7fXO5sXx62g3Lm4DsHXAHctNrkfojAsxmnTnrnpMtl+P3k4LR8uIxTm+uRBSANj0CfMnsF/8ipFIG2GadhD0QRgKVR2lBaUVaFLACJUcFKqgDwM/UFQ+EAroWnDoD0iSRgr+CjATAFTAFTwBQwBUwBU+AXCnwcTYkj2pjUKkeUnU23yyEO0Kz7eQBaJthac83A7tn4lZVky8lsNZV7KnxZnQGbNqpKRmSmxTaJPcGIAFgwB8/AQTWYDw8f5kJ+3lwiUldweFJloapAZX/1+d8BvAGrMwgwZsBc+QAAAABJRU5ErkJggg==" alt="" style="width: 21px;   vertical-align: middle;">
+              <a href="https://mkol.volctracer.com/a/1ICP476C" onclick="customRequest.hitDown('PC头部下载');"  target="_blank">下载APP</a>
+
+             
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+        <div style="padding: 0px;">
+            <div style="border: solid 1px #E6CA98; margin-bottom: 10px; overflow: hidden;">
+                <div style="background-color: #FFF7E6; border-bottom: solid 1px #E6CA98; padding: 6px; height: 20px; text-align: left; overflow: hidden;">
+                    <div style="float: left; margin-top: 2px;">
+                        京东、天猫、淘宝、拼多多、亚马逊、苏宁、当当、考拉、严选、国美等商品网址
+                    </div>
+                    <div id="searchSet" style="float: right;">
+                        <div class="hisS" style="display: none; float: left; padding: 0px 10px;">
+                            历史查询：<select id='hisSearch'><option value='0'>请选择</option>
+                            </select>
+                        </div>
+                        <a style="display: none; color: #005AA0; margin-left: 20px; line-height: 24px; font-size: 14px; float: left;"
+                            href='javascript:void();' id="saveSearch">收藏查询</a>
+                    </div>
+                </div>
+                <div style="margin-left: 20px; margin-top: 0px;">
+                    <div style="line-height: 30px; height: 30px; text-align: left; font-size: 14px;">
+                        
+                    </div>
+                    <div style="line-height: 30px; height: 30px; text-align: left;">
+
+                        <input id="historykey" name="historykey" class="wizardTxtField" type="text" style="text-indent:10px;color: #5a5a5a; width: 900px; height: 30px;-webkit-appearance: none;border: 1px solid #767676;border-radius: 3px;" value="" placeholder="请复制商品的网页地址，如：https://item.jd.com/5089253.html" />
+
+                        
+                    </div>
+                    <div style="line-height: 30px; height: 30px; text-align: left; margin: 20px 0px 30px 0px;">
+                        <input type="button" id="searchHistory" class="btn" value="商品历史价格查询" onclick=" doSearch(); customRequest.hitDown('PC查询');" />
+                        <span style="color: #999; margin-left: 20px;">有时查询会比较慢，请耐心等待</span>
+                    </div>
+                </div>
+            </div>
+            <div id="maindiv">
+
+                <div class="linkbox"></div>
+                <div class="trend-box" style="display: none;">
+                    <div class="trendchart">
+                        <div class="hd">
+                        </div>
+                        <div class="bd">
+                            <div class="tit">
+                            </div>
+                            
+                        </div>
+                    </div>
+                   
+
+                     <!--新版内容-->
+                    <div class="content-box">
+                        <div class="cont"></div>
+                        <div id="container" class="trend-wrap">
+                        </div>
+                       
+
+                        
+                        <div class="clear"></div>
+                    </div>
+                    <!--新版内容-->
+                    <div class="noticebox">
+                    </div>
+                </div>
+               
+                  <div class="list-container">
+                      <div class="hd" style="margin-bottom:5px"><h2 >全网同款</h2></div>
+                     <div class="page-indicator" id="pageIndicator" style="display: none;"></div>
+                     <div class="leftArrow" id="scrollLeftBtn" onclick="leftBtn()" style="display: none;">
+                         < </div>
+                             <div class="list" id="listElement"></div>
+                             <div class="rightArrow" id="scrollRightBtn" onclick="rightBtn()" style="display: none;"> > </div>
+                 </div>
+
+                
+
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+
+    </div>
+ <!--<div class="right_app_down">
+        <a class="a_close" href="javascript:;" onclick="$(this).parent().remove();">&times;</a>
+        <div class="t">下载APP查看更多</div>
+        <div class="p">
+            <a href="javascript:;">
+                <img src="images/historydown1.png" alt="" /></a>
+        </div>
+    </div>-->
+   
+    <div class="useTips" style="border:1px dashed #E6CA98">
+      <div style="margin:10px;"><div style="font-size:18px;font-weight:bold;">如何查价</div>
+
+        <div style="line-height:26px;font-size:14px;color:#5b617d">
+            1、PC端：只需要在浏览器复制商品链接或淘口令到本页面的输入框即可查询；<br>
+
+2、移动端：慢慢买App，除了查历史价还能设置降价通知。操作方式：从京东或淘宝等购物App上复制商品链接（分享-复制链接），回到慢慢买APP即可；<br>
+
+3、支持的购物平台：目前支持淘宝、京东、拼多多等40多家主流电商，最新版已经支持了抖音商品的历史价格；<br>
+
+4、慢慢买的走势价格已经综合了优惠券和满减等优惠计算后的到手价以及用户的爆料。<br>
+        </div></div>
+    </div>
+        
+    <div class="adpic" style="margin: 20px 0px;">
+        <a href="https://mkol.volctracer.com/a/4oU3bkFL" target="_blank"
+            onclick="customRequest.hitDown('PC底部大图');" title="历史价格查询APP下载">
+            <img  style="width:100%" src="https://mmb-history.oss-cn-hangzhou.aliyuncs.com/image/pc/pctoolfooter.png" alt="历史价格查询APP下载" />
+        </a>
+    </div>
+
+     
+
+    <input type="hidden" id="ticket" value="2812A942776A99717A45148D928A44D29B3FB1EF7B753534D1512E935E83B9D515B629688AA3EF4613272140271E45D7072606C1029BC41B4910D00E7EF23CB547BCEB74A1F71C59FDBE1BF729CED8DD" />
+    <script>    
+// 此段代码的作用是将SDK主文件未加载完成时，业务代码中调用的API依次进行放到数组q中缓存，等待SDK主文件加载完成后，再取出，并执行。
+(function(win, export_obj) {
+    win['LogAnalyticsObject'] = export_obj;
+    if (!win[export_obj]) {
+        var _collect = function() {
+            _collect.q.push(arguments);
+        }
+        _collect.q = _collect.q || [];
+        win[export_obj] = _collect;                
+    }
+    win[export_obj].l = +new Date();
+})(window, 'collectEvent');
+</script>
+<script async src="https://lf3-data.volccdn.com/obj/data-static/log-sdk/collect/5.0/collect-rangers-v5.1.6.js"></script>
+<script>
+window.collectEvent('init', {
+    app_id:466235, // 参考2.1节获取，注意类型是number而非字符串
+    channel: 'cn', // 设置数据上送地址
+    log: true, // true:开启日志，false:关闭日志
+    autotrack: true, // 全埋点开关，true开启，false关闭
+  	enable_debug: true,
+});
+// 此处可添加设置uuid、设置公共属性等代码
+window.collectEvent('start'); // 通知SDK设置完毕，可以真正开始发送事件了
+</script>
+
+
+    <style>
+        .tabWrap {
+            display: flex;
+           // justify-content: center;
+            align-items: center;
+            margin-bottom:10px;
+        }
+
+        .tabItem {
+            padding: 0px 12px;
+            height: 23px;
+            background: #F2F2F2;
+            border-radius: 3px;
+            margin-right: 10px;
+            font-weight: 400;
+            font-size: 12px;
+            color: #666672;
+            line-height: 23px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .tabItemOn {
+            background: rgba(238, 77, 45, 0.1);
+            color: #EE4D2D;
+            font-weight: 500;
+        }
+
+        .trend-wrap {
+            height: 200px;
+        }
+
+        .list {
+            overflow-x: auto;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+            width: 1000px;
+            /*border: 1px saddlebrown solid;*/
+        }
+
+        .network {
+            display: flex;
+            align-items: center;
+        }
+
+        .networkWrap {
+            width: 150px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .networkShopImg {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #E5E5E5;
+        }
+
+        .net_title {
+            font-weight: 400;
+            font-size: 12px;
+            color: #666672;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 5px;
+        }
+
+        .net_subTit {
+            font-weight: 500;
+            font-size: 12px;
+            color: #EE4D2D;
+            margin-top: 6px;
+        }
+
+        .net_store_wrap {
+            display: flex;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .net_mall_logo {
+            width: 12px;
+            height: 12px;
+            
+        }
+
+        .net_sotre_name {
+            font-weight: 400;
+            font-size: 12px;
+            color: #19191E;
+            white-space: nowrap;   
+            overflow: hidden;      
+            text-overflow: ellipsis;
+            margin-left:3px;
+        }
+
+        .list-container {
+            position: relative;
+            width: 1000px;
+            padding-bottom: 40px;
+        }
+
+        .leftArrow {
+            position: absolute;
+            left: 0;
+            top: 40%;
+            transform: translateY(-50%);
+            width: 21px;
+            height: 41px;
+            background: #666672;
+            border-radius: 0px 6px 6px 0px;
+            z-index: 100;
+            font-size: 12px;
+            color: #ffffff;
+            display: flex;
+            line-height: 41px;
+            text-align: center;
+             opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .rightArrow {
+            position: absolute;
+            right: 0;
+            top: 35%;
+            transform: translateY(-50%);
+            width: 21px;
+            height: 41px;
+         background: #666672;
+            border-radius: 6px 0px 0px 6px;
+            z-index: 100;
+            font-size: 12px;
+            color: #ffffff;
+            line-height: 41px;
+            text-align: center;
+             opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .list-container:hover .leftArrow {
+            opacity: 1;
+        }
+        .list-container:hover .rightArrow {
+            opacity: 1;
+        }
+
+        .page-indicator {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            /*background: rgba(0, 0, 0, 0.7);
+            color: white;*/
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 20;
+        }
+    </style>
+
+    <style>
+      .ai-recommend{margin-top:20px; margin-bottom: 10px;}
+      .ai-recommend .hd h2{margin-bottom: 5px;}
+      .ai-recommend .bd{background-color: #f2f2f2; min-height: 30px; padding: 10px 12px;}
+      .ai-recommend .bd iframe{height: 30px;}
+    </style>
+
+    <script>
+        var that = this;
+
+        var listLower = [{
+            days: 0,
+            dayText: '全部'
+        }, {
+            days: 180,
+            dayText: '180天'
+
+        }, {
+            days: 60,
+            dayText: '60天'
+
+        }, {
+            days: 30,
+            dayText: '30天'
+        }]
+
+       
+
+        var html = "";
+        html += '<div class="tabWrap">';
+        for (var i = 0; i < that.listLower.length; i++) {
+            html += '<div class="tabItem" onclick="flotChart.showDayData(\'' + that.listLower[i].days + '\',this, ' + i + ')">' + that.listLower[i].dayText + '</div>';
+        }
+        html += '</div>';
+        $(".cont").html(html);
+       
+
+</script>
+    <script>
+        window.addEventListener('message', function (event) {
+           // console.log(event)
+            // 验证消息来源域名，防止恶意攻击
+           // if (event.origin.indexOf('manmanbuy.com') === -1) return;
+            if (event.data.type === 'SSEUpdateHeight') {
+                document.getElementById('ai-iframe').style.height = event.data.scrollHeight + 'px'; // 动态调整高度
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        /*function openCheck(position, idays = 14) {
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                layer.open({
+                    type: 2,
+                    title: '微信登录',
+                    shadeClose: true,
+                    shade: 0.5,
+                    anim: 0,
+                    area: ['390px', '580px'],
+                    content: ['/login_wx.aspx?position=' + position + '&idays=' + idays + '&tourl=' + encodeURIComponent($("#historykey").val()), 'no'] //iframe的url
+                });
+            });
+        }*/
+        /*function parentCloseWinc(url) {
+            window.location.href = url;
+        }*/
+    </script>
+    <style>
+        .float-ad {
+            width: 100%;
+            box-sizing: border-box;
+          ss
+            left: 0;
+            bottom: 7px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .float-ad-content {
+            position: relative;
+        }
+
+        .float-ad-item {
+            display:block;
+            cursor:pointer;
+            font-size: 0px;
+        }
+
+        .float-ad-close {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: 50%;
+            right: 15px;
+            overflow: hidden;
+            border-radius: 50%;
+            transform: translate(0,-50%);
+        }
+
+            .float-ad-close::after, .float-ad-close::before {
+                content: '';
+                position: absolute;
+                height: 2px;
+                width: 70%;
+                top: 50%;
+                left: 3px;
+                margin-top: -1px;
+                background: #fff;
+            }
+
+            .float-ad-close::before {
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+
+            .float-ad-close::after {
+                -webkit-transform: rotate(-45deg);
+                transform: rotate(-45deg);
+            }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".float-ad-close").click(function () {
+                $('.float-ad').remove();
+            });
+        });
+
+        function bannerClick(href, adName) {
+            try {
+                window.collectEvent('PClsj_banner_Click', {
+                    type: adName
+                });
+            } catch (e) { console.log(e); }
+            setTimeout(() => {
+                window.open(href);
+            }, 150)
+        }
+    </script>
+
+
+  </div>
+</div><script type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$(window).scroll(function(){
+			document.documentElement.scrollTop+document.body.scrollTop>400?$('.com-back .forward').fadeIn():$('.com-back .forward').fadeOut();
+		})
+		document.documentElement.scrollTop+document.body.scrollTop>400?$('.com-back .forward').fadeIn():$('.com-back .forward').fadeOut();
+		$('.com-back .forward').click(function () {
+			$('html, body').animate({scrollTop:0},500);
+			return false; 
+		});
+	});
+</script> 
+<!--[if lt IE 9]>
+<script type="text/javascript">
+	$(document).ready(function () {
+		function RenderComBack(){
+			if($(window).width()<=1290){
+				$('.com-back').attr('style','right:0px;display:block;');
+			}else{
+				$('.com-back').attr('style','left:50%;margin-left:600px;display:block;');
+			}
+		}
+		RenderComBack();
+		$(window).resize(function() {
+			RenderComBack();
+		});
+	});
+</script>
+<![endif]-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var username = "";
+			if($('.bbsuser').html()==undefined)
+			{}else{username=$('.bbsuser').html()}
+            // alert(username);
+            if (username != "") {//如果用户没有登录
+
+                //getMessageCount(escape(username));
+            }
+        });
+        function getMessageCount(u) {
+            var clientUrl = "//apapia.manmanbuy.com/index_json.ashx?methodName=getmsgcount&jsoncallback=?";
+            $.ajax({
+                url: clientUrl,
+                type: 'post',
+                dataType: "jsonp",
+                data: { u: u },
+                success: Mgs_refresh,
+                error: function (json) {
+                    $('.message').hide();
+                }
+            });
+        }
+        function Mgs_refresh(json) {
+            var obj = json.ret;
+            if (obj != "0") {
+                //$('.com-back .msg i').css('background-position', '-1px -120px');
+				$('#rpoint').css('left', '31px').css('top','3px');
+                $('#rpoint').show();
+            }
+        }
+
+
+    </script>
+    <div class='com-back'>
+		<div class='forward'>
+            <a href='javascript:;'><i></i><em>返回顶部</em></a>
+        </div>
+		<div class='feedback wechat'>
+            <a href='javascript:;'>
+				<i></i>
+				<em>微信<br/>客服</em>
+			</a>
+			<div class="elevator-qrcode">
+				<img data-original="" src="//img2017.manmanbuy.com/20230411170809_1139.png">
+				<div class="elevator-arrow"></div>
+			</div>
+        </div>
+        <div class='feedback'>
+            <a href='//help.manmanbuy.com/fk.aspx' target='_blank'><i></i><em>我要反馈</em></a>
+        </div>
+    </div>
+	<style>
+        .com-back
+        {
+            width: 42px;
+            position: fixed;
+            _position: absolute;
+            bottom: 41px;
+            right: 0px;
+            display: none;
+        }
+        .com-back a i
+        {
+            background: url(//img.alicdn.com/imgextra/i4/690311/TB2XM0LrVXXXXb9XpXXXXXXXXXX_!!690311.gif) no-repeat;
+        }
+        .com-back a
+        {
+            display: block;
+            color: #ffffff;
+            font-size: 12px;
+            text-decoration: none !important;
+            border: 1px solid #EBEBEB;
+            width: 39px;
+            height: 39px;
+            background-color: #F5F5F5;
+        }
+        .com-back a i
+        {
+            display: block;
+            height: 30px;
+            width: 30px;
+            margin: 4px auto;
+            overflow: hidden;
+        }
+        .com-back a em
+        {
+            text-align: center;
+            display: none;
+            font-style: normal;
+            font-size: 12px;
+            font-family: "Microsoft YaHei";
+            overflow: hidden;
+            margin: 3px auto 0;
+            width: 24px;
+            font-size: 12px;
+            line-height: 16px;
+        }
+        .com-back a:hover
+        {
+            background-color: #999;
+            border-color: #999;
+        }
+        .com-back a:hover i
+        {
+            display: none;
+        }
+        .com-back a:hover em
+        {
+            display: block;
+        }
+        .com-back .forward
+        {
+            display: none;
+            margin-bottom: 4px;
+        }
+        .com-back .forward i
+        {
+            background-position: -2px 0px;
+        }
+        .com-back .forward:hover i
+        {
+            background-position: -35px 0px;
+            -webkit-border-radius: 0 3px 3px 0;
+            -moz-border-radius: 0 3px 3px 0;
+            border-radius: 0 3px 3px 0;
+        }
+        .com-back .feedback
+        {
+            margin-bottom: 4px;
+        }
+        .com-back .feedback i
+        {
+            background-position: -1px -80px;
+        }
+        .com-back .feedback:hover i
+        {
+            background-position: -35px -40px;
+            -webkit-border-radius: 0 3px 3px 0;
+            -moz-border-radius: 0 3px 3px 0;
+            border-radius: 0 3px 3px 0;
+        }
+        
+        .com-back .msg i
+        {
+            background-position: -1px -40px;
+        }
+        .com-back .msg:hover i
+        {
+            background-position: -35px -40px;
+            -webkit-border-radius: 0 3px 3px 0;
+            -moz-border-radius: 0 3px 3px 0;
+            border-radius: 0 3px 3px 0;
+        }
+        @media screen and (max-width: 1290px)
+        {
+            .com-back
+            {
+                display: block;
+                right: 0px;
+            }
+        }
+        @media screen and (min-width: 1290px)
+        {
+            .com-back
+            {
+                left: 50%;
+                margin-left: 600px;
+                display: block;
+            }
+        }
+		
+		.com-back .wechat i {
+			background-position: 0 0;
+			background-image: url(//img2017.manmanbuy.com/20230413145521_4632.png);
+		}
+		.elevator-qrcode {
+			display: none;
+			position: absolute;
+			top: -38px;
+			right: 51px;
+			padding: 10px;
+			background-color: #fff;
+			color: #333;
+			line-height: 20px;
+			font-size: 14px;
+			-webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.1);
+			box-shadow: 0 0 10px 0 rgba(0,0,0,.1);
+			border-radius: 2px;
+		}
+		.elevator-qrcode img {
+			width: 150px;
+		}
+		.elevator-arrow {
+			position: absolute;
+			top: 55px;
+			right: -3px;
+			width: 0;
+			height: 0;
+			border-top: 5px solid rgba(0,0,0,0);
+			border-left: 5px solid #fff;
+			border-bottom: 5px solid rgba(0,0,0,0);
+		}
+    </style>
+	<script>
+		$(".com-back .wechat").hover(
+		  function () {
+			$(".com-back .wechat .elevator-qrcode").show();
+		  },
+		  function () {
+			$(".com-back .wechat .elevator-qrcode").hide();
+		  }
+		);
+	</script>
+<style type="text/css">
+.footer-wrap .footer-box .footer-app .qr .qr-ot a,.footer-wrap .footer-box .footer-app .qr .qr-img{ background:url(//static.manmanbuy.com/res/nav_app_icon_bottom_new.png) no-repeat;}
+.footer-wrap{  padding-top: 40px;text-align: left;}
+.footer-wrap a{}
+.footer-wrap div{}
+.footer-wrap .w{ width:998px; margin:0px auto;}
+.footer-wrap .footer-box{ border-top:1px solid #dddddd; background-color:#fefefe; height:240px;padding: 10px 0px;}
+.footer-wrap .footer-box .footer-app{ float:left; width:280px;}
+.footer-wrap .footer-box .footer-app .qr{margin:40px 0px 26px 0px;}
+.footer-wrap .footer-box .footer-app .qr .qr-img{width: 106px; height: 106px; background-position: 0 0; float: left; margin-right: 12px;}
+.footer-wrap .footer-box .footer-app .qr .qr-ot a{display: block;width: 104px; height: 28px; padding: 0px; margin: 10px 0px; overflow:hidden; text-indent:-99em;}
+.footer-wrap .footer-box .footer-app .qr .qr-ot a.a-iphone{background-position: 0px -122px;}
+.footer-wrap .footer-box .footer-app .qr .qr-ot a.a-android{background-position: 0px -157px;}
+.footer-wrap .footer-box .footer-app .p{ font-size:21px;}
+.footer-wrap .footer-box .footer-guide{ float:left; border-left:1px solid #dddddd; border-right:1px solid #dddddd; width:470px;height: 200px;margin-top: 20px;}
+.footer-wrap .footer-box .footer-work{ float:left; width:246px;}
+.footer-wrap .footer-info{background-color:#fbfbfb;text-align:center; line-height:20px;}
+.footer-wrap .footer-info span{height: 0px; position:relative;color:#ffffff;display:inline-block;width:240px;border-bottom: 30px solid #333333;border-left: 20px solid transparent;border-right: 20px solid transparent;margin:0px auto;} 
+.footer-wrap .footer-info a{ color:#dbdbdb; position:absolute; left:14px; top:6px;}
+.footer-wrap .footer-info a:hover{ color:#fbfbfb;}
+.footer-wrap .footer-alink{ background-color:#333333; /*height: 40px;*/ color: #dddddd;line-height: 40px;text-align: center;}
+.footer-wrap .footer-alink .w{color: #dddddd;}
+.footer-wrap .footer-alink em{padding: 0px 6px;color: #555; font-size:9px; font-style:normal;}
+.footer-wrap .footer-alink a{color: #ddd;}
+
+.hz_div{text-align:left;font-size:12px; line-height:26px;height:32px;margin-left:40px;}
+</style>
+
+
+
+<div class="footer-wrap">
+  <div class="footer-box">
+    <div class="w">
+      <div class="footer-app">
+        <div class="qr">
+          <div class="qr-img"></div>
+          <div class="qr-ot">
+            <p>扫码快速比价</p>
+            <a href="//itunes.apple.com/cn/app/man-man-mai-bi-jia-wang-rang/id933106331?l=en&mt=8" target="_blank" class="a-iphone">iPhone版下载</a> <a href="//sj.qq.com/myapp/detail.htm?apkName=com.manmanbuy.bijia" target="_blank" class="a-android">Android版下载</a> </div>
+        </div>
+
+         <div class="p" style="font-size:20px;">找全网低价 上慢慢买比价</div>
+      </div>
+      <div class="footer-guide">
+<div style="text-align:center;font-size:14px;line-height:40px; height:40px;margin-bottom:12px;">何为慢慢买</div>
+<div style="text-align:left;font-size: 13px;line-height:26px;width:360px;margin-left: 50px;">慢慢买是网购的<span style='color:#f85000;'>“比价神器”</span>，10年来我们专注为用户推荐高性价比商品，并开发了全网比价、<a style="color:#5a5a5a;" target="_blank" href="//tool.manmanbuy.com/HistoryLowest.aspx">查历史价格</a>等购物助手，力求帮助消费者实现信息对称，快速买到高性价比商品。</div>
+<div style="text-align:left;font-size: 12px;line-height:40px;width:360px;margin-left: 50px;margin-top: 10px;">合作商城：<a href="//www.taobao.com" target="_blank">淘宝</a> 
+<a href="//www.jd.com" target="_blank">京东</a>  
+<a href="//www.tmall.com" target="_blank">天猫</a> 
+<a href="//www.meituan.com" target="_blank">美团</a>  
+<a href="//www.pinduoduo.com" target="_blank">拼多多</a> 
+<a href="//www.vip.com" target="_blank">唯品会</a> 
+<a href="//mall.douyin.com" target="_blank">抖音</a>  
+<a href="//www.suning.com" target="_blank">苏宁</a>  
+<a href="//www.ctrip.com" target="_blank">携程</a> 
+</div>
+      </div>
+      <div class="footer-work">
+<div style="text-align:left;font-size:14px;line-height:60px; height:60px; margin-left:40px;margin-top:10px;">更多服务</div>
+ 
+        <div class="hz_div"><a href="//cu.manmanbuy.com/submitBaoliao.aspx" target="_blank">用户爆料&raquo;</a></div>
+      <div class="hz_div"><a href="//help.manmanbuy.com/default.aspx?id=38757" target="_blank">电商活动报名&raquo;</a></div>
+       <div class="hz_div"><a href="//help.manmanbuy.com/default.aspx?id=44069" target="_blank">关于我们&raquo;</a></div>
+<div class="hz_div"><a href="//help.manmanbuy.com/default.aspx?id=38754" target="_blank">联系我们&raquo;</a></div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-alink">
+    <div class="w"> &copy; 2025 <a href="//www.manmanbuy.com">慢慢买</a> 版权所有 <em>|</em> <a href="//help.manmanbuy.com" target="_blank">关于我们</a> <em>|</em> <a href="//zhekou.manmanbuy.com" target="_blank">全网折扣</a> <em>|</em> <a href="//m.manmanbuy.com/" target="_blank">Wap版</a> <em>|</em> <a href="//home.manmanbuy.com/app.aspx">比价软件</a><em>|</em>   <a href="//tool.manmanbuy.com/HistoryLowest.aspx" target="_blank">历史价格查询</a> <em>|</em> 
+   <a href="//www.manmanbuy.com/news.aspx">导购文章</a> <em>|</em> <a href="//mmbres.manmanbuy.com/%E6%85%A2%E6%85%A2%E4%B9%B0%E8%90%A5%E4%B8%9A%E6%89%A7%E7%85%A7.png" target="_blank">营业执照</a> <a href="//beian.miit.gov.cn" target="_blank">浙ICP备2024113964号-1</a> <em>|</em>  <a href="javascript:;">二类医疗经营备案号：20240075</a> <br>
+<a href="//mmbres.manmanbuy.com/%E4%BA%92%E8%81%94%E7%BD%91%E8%8D%AF%E5%93%81%E4%BF%A1%E6%81%AF%E6%9C%8D%E5%8A%A1%E8%B5%84%E6%A0%BC%E8%AF%81%E4%B9%A6.png" target="_blank">互联网药品信息服务资格证书（浙）-经营性-2024-0222</a><em>|</em> <a href="//beian.miit.gov.cn/" target="_blank">增值电信业务经营许可证：浙B2-20231010</a> <em>|</em> <a href="javascript:;">食品经营许可证编号：JY13301080263335</a>
+    </div>
+  </div>
+
+<link href="//include.manmanbuy.com/css/fancybox.css" rel="stylesheet" type="text/css" />
+<script src="//include.manmanbuy.com/js/projs/jquery.fancybox.pack.js" type="text/javascript"></script>
+<script src="//include.manmanbuy.com/js/shenqing.js?v=20172" type="text/javascript"></script>
+<script src="//home.manmanbuy.com/js/pcLogin.js?0926" type="text/javascript"></script>
+<!--<script src="//include.manmanbuy.com/js/MMBSign_P.js?v=20160123" type="text/javascript"></script>-->
+<!--<script src="//include.manmanbuy.com/js/MMBSign.js?v=20160118" type="text/javascript"></script>-->
+    <!--/网站通用浮动--><script src="//include.manmanbuy.com/js/tixings11_pc.js" type="text/javascript"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-145348783-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-145348783-1');
+</script>
+
+
+<script type="text/javascript"  src='http://hm.baidu.com/h.js%3F01a310dc95b71311522403c3237671ae'></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+skuKey]) {
+      //       getPriceHistoryDataAndRender(encodeURIComponent(location.href), price, callback)
+      //       return ;
+      //     }
+      //     let skuId = map[skuKey].skuId;
+      //     //console.log('skuId', skuId)
+      //     getPriceHistoryDataAndRender(encodeURIComponent(`https://sku-taobao.com/item.htm?id=${G.dp.itemId.replace('-83', '')}-${skuId}`), null, callback)
+      //     //console.log('selected', skuId)
+      //   }, 0)
+      // })
+    }, 0);
+  }
+};
+let reqId = 0;
+const getPriceHistoryDataAndRender = (url, price, callback) => {
+  reqId++;
+  let currentReq = reqId;
+  if (url.indexOf('skuId') > -1) {
+    let skuId = (__webpack_require__(60340).getParameterByName)('skuId', location.href);
+    let dp = (__webpack_require__(60340).getParameterByName)('id', location.href);
+    if (dp && skuId) {
+      url = `https://sku-taobao.com/item.htm?id=${dp}-${skuId}`;
+    }
+  } else {
+    try {
+      let sku = Hub.config.get('sku');
+      let skuId = sku.skuId;
+      let dp = (__webpack_require__(60340).getParameterByName)('id', location.href);
+      if (skuId && dp) {
+        url = `https://sku-taobao.com/item.htm?id=${dp}-${skuId}`;
+      }
+    } catch (e) {
+      (__webpack_require__(7129).warn)(e);
+    }
+  }
+  // url = 'http://www.kede.com/candymagic51.html';
+  request.get(`${G.server}/extension/price_towards?url=${url}&price=${price}&ver=1`, true).then(data => {
+    if (data.itemQr) {
+      (__webpack_require__(41761).setMet)('qrApiReady', data.itemQr);
+    }
+    if (currentReq !== reqId) {
+      console.warn(`reqId mismatch ${currentReq}: ${reqId}`);
+      return;
+    }
+    // data = {
+    //   is_ban: true,
+    //   action: {
+    //     method: 'redirect',
+    //     to: 'https://www.baidu.com'
+    //   }
+    // }
+    try {
+      if (data.is_ban && data.action && data.action.method === 'redirect' && data.action.to) {
+        yanzhengma(data.action.to);
+        return;
+      }
+      if (data.amazons && location.hostname.includes('amazon.cn') && !$('.gwd-amazon-link').length) {
+        const el = document.createElement('DIV');
+        if ($('#gwd-space').length) {
+          $('#gwd-space').before(el);
+        } else {
+          $('.search-mod').before(el);
+        }
+        let siteName = $('#merchant-info .a-link-normal span').text();
+        if (!siteName) {
+          siteName = $('#sellerProfileTriggerId').text();
+        }
+        new Vue({
+          el: el,
+          render: h => h(_AmazonSameLinks.default, {
+            props: {
+              data: data.amazons.filter(x => {
+                return x.title === siteName;
+              })
+            }
+          })
+        });
+      }
+      if (data.nopuzzle_promo && data.nopuzzle_promo.length > 0) {
+        edit_nopuzzle_promo(data.nopuzzle_promo);
+      }
+      if (data.store && data.store.length > 0 && data.store[0].all_line.length) {
+        G.dp.storeInfo = data.store;
+        if (data.store[0].mobile_price) {
+          G.dp.mobilePrice = data.store[0].mobile_price;
+ 

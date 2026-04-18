@@ -1,0 +1,55 @@
+G.site == 'amazon' && location.host.indexOf('cn') != -1) return fn(false);else if (tryTimes >= 6) return fn(false);
+  var msg = $(`#${G.extBrand}_myDiv`).text();
+  if (msg) fn(msg);else {
+    tryTimes++;
+    setTimeout(function () {
+      getContentFromDiv(fn);
+    }, 1000);
+  }
+};
+const getPriceInfo = callback => {
+  if (G.site === 'amazon' && location.host != 'www.amazon.cn') {
+    isForeignSite = true;
+    currentCurrency = 'USD';
+    if (location.host == 'www.amazon.co.jp') {
+      currentCurrency = 'JPY';
+    }
+    if (['www.amazon.fr', 'www.amazon.de', 'www.amazon.es', 'www.amazon.nl', 'www.amazon.it'].indexOf(location.host) > -1) {
+      currentCurrency = 'EUR';
+    }
+    if (location.host == 'www.amazon.ca') {
+      currentCurrency = 'CAD';
+    }
+    if (location.host == 'www.amazon.co.uk') currentCurrency = 'GBP';
+    getCommonInfo(callback);
+  } else if (G.site === 'tmall' || G.site === 'taobao-95095' || G.site === 'ai-taobao' || G.site === 'taobao') {
+    // require('common/getTaobaoTrend').getTrend(function(trenddata) {
+    //   if (!trenddata || trenddata.nodata === true) {
+    //     getCommonInfo(callback);
+    //   } else {
+    //     dealWithEtaoData(trenddata, function(data) {
+    //       if (data) callback(data)
+    //       else getCommonInfo(callback);
+    //     });
+    //   }
+    // })
+
+    /*以前因为我们价格走势对淘宝天猫的支持不好 所以使用了别人的数据， 现在基本上都使用了自己的数据， 所以上面也被注释了*/
+    setTimeout(() => {
+      getCommonInfo(callback);
+    }, 200);
+    // 避开lint js 检测
+    if (false) {}
+  } else if (G.site === 'aliexpress') {
+    (__webpack_require__(20669).getTrendData)(data => {
+      if (data) callback(data);
+    });
+  } else {
+    getCommonInfo(callback);
+  }
+};
+const getPriceStatus = trenddata => {
+  // 对于使用第三方数据的， 判断价格走势
+  var price_status = 0;
+  var price_num = trenddata.length;
+  let priceArr = trenddata.map(i => i[1

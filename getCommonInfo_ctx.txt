@@ -1,0 +1,79 @@
+= '淘宝';
+  if (host.indexOf('tmall') > -1) str = '天猫';
+  str = site_name || str;
+  let noTrendObj = {
+    all_line: arr,
+    all_line_begin_time: date,
+    first_price: price,
+    current_price: price,
+    highest: price,
+    last_price: price * 100,
+    lowest: price,
+    lowest_date: new Date(date2).getTime(),
+    name: str,
+    price_range: `${price}-${price}`,
+    price_status: 0
+  };
+  data.price_status = 0;
+  data.store = [noTrendObj];
+  data.taobaoNoTrend = true;
+  return data;
+};
+const getCommonInfo = callback => {
+  let pageUrl = location.href;
+  if (G.site === 'taobao-ju') {
+    let id = pageUrl.match(/item_id=(\d+)/)[1];
+    pageUrl = `https://detail.tmall.com/item.htm?id=${id}`;
+  }
+  let url = encodeURIComponent(pageUrl);
+  let price = G.dp.price;
+  price = parseFloat(price);
+  if (price) {
+    if (isForeignSite) {
+      price = G.dp.oldPrice;
+    }
+    price = parseInt(parseFloat(price * 100).toFixed(2));
+    price = price.toFixed(2);
+  } else {
+    price = '';
+  }
+  if (G.aliSite) {
+    price = getAliPrice(price);
+  }
+  getPriceHistoryDataAndRender(url, price, callback);
+  if (G.site === 'taobao' || G.site === 'tmall') {
+    let origin = window.removeEventListener;
+    setTimeout(async () => {
+      // eslint-disable
+      // let map = {}
+      // if (G.site === 'taobao') {
+      //   map = Hub.config.get("sku").valItemInfo.skuMap; // eslint-disable-line
+      // } else {
+      //   let valItemInfo = await require('common/infoCollect/aliSku').getValItemInfo()
+      //   map = valItemInfo.skuMap
+      // }
+
+      $('li').on('click', e => {
+        if (!$(e.target).parents('.tb-key-sku').length) {
+          console.log($(e.target).parents('.tb-key-sku'));
+          return;
+        }
+        try {
+          setTimeout(() => {
+            window.extNeedReload = true;
+          }, 0);
+        } catch (e) {
+          (__webpack_require__(7129).warn)(e);
+        }
+      });
+      // $('li').on('click', function(e) {
+      //   //console.log(e)
+      //   setTimeout(() => {
+      //     let selected = $('.tb-selected').toArray().map(item => $(item).attr('data-value')).join(';')
+      //     let skuKey = ';' + selected + ';';
+      //     skuKey = skuKey.replace(';;', ';').replace(';;', '');
+      //     // console.log('skuKey',skuKey)
+      //     // console.log(map)
+      //     require('common/globalCondition').clear('lastPointPos')
+      //     if (!map[skuKey]) {
+      //       getPriceHistoryDataAndRender(encodeURIComponent(location.href
