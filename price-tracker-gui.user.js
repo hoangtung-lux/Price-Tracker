@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      3.1.0
 // @description  Giao diện Premium cho Price Tracker. Kết nối với Price Tracker Engine.
-// @author       Antigravity
+// @author       Hoàng Tùng
 // @match        *://*.taobao.com/*
 // @match        *://*.tmall.com/*
 // @match        *://*.jd.com/*

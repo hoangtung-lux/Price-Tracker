@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      3.1.0
 // @description  Lõi API (Manmanbuy + Gouwudang). Không có giao diện.
-// @author       Antigravity
+// @author       Hoàng Tùng
 // @match        *://*.taobao.com/*
 // @match        *://*.tmall.com/*
 // @match        *://*.jd.com/*
