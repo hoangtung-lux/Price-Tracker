@@ -17,7 +17,7 @@ Chào mừng bạn! Đây là hướng dẫn giúp bạn cài đặt công cụ 
 Để chạy được công cụ này, trình duyệt của bạn cần một tiện ích hỗ trợ. Chúng tôi khuyên dùng **Violentmonkey** vì nó nhẹ và bảo mật nhất.
 
 - **Dành cho Chrome, Edge, Cốc Cốc**: 
-  👉 [Tải Violentmonkey trên Chrome Web Store](https://chrome.google.com/webstore/detail/violentmonkey/jinjaccaljkdabocponuonmfmeneiojj)
+  👉 [Tải Violentmonkey trên Chrome Web Store](https://chromewebstore.google.com/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag)
 - **Dành cho Firefox**:
   👉 [Tải Violentmonkey trên Firefox Add-ons](https://addons.mozilla.org/vi/firefox/addon/violentmonkey/)
 

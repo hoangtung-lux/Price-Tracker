@@ -18,7 +18,7 @@ Dành cho bạn nào chưa biết cách cài đặt, hãy làm theo 2 bước đ
 
 ### Bước 1: Cài đặt tiện ích hỗ trợ
 Bạn cần cài bộ máy chạy script tên là **Violentmonkey** vào trình duyệt:
-- [Cài Violentmonkey cho Chrome / Edge / Cốc Cốc](https://chrome.google.com/webstore/detail/violentmonkey/jinjaccaljkdabocponuonmfmeneiojj)
+- [Cài Violentmonkey cho Chrome / Edge / Cốc Cốc](https://chromewebstore.google.com/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag)
 - [Cài Violentmonkey cho Firefox](https://addons.mozilla.org/vi/firefox/addon/violentmonkey/)
 
 ### Bước 2: Cài đặt Price Tracker
