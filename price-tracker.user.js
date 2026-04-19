@@ -30,6 +30,7 @@
     const CONFIG = {
         GWD_API: "https://api.gwdang.com/extension/price_towards",
         MMB_API: "https://tool.manmanbuy.com/history.aspx",
+        MMB_COUPON_API: "https://tool.manmanbuy.com/history.aspx?DA=1&action=getcoupon",
         REFERERS: {
             GWD: "https://www.gwdang.com/",
             MMB: "https://tool.manmanbuy.com/"
@@ -37,8 +38,12 @@
     };
 
     window['VHPriceTrackerCore'] = {
-        dataStore: { mmb: [], gwd: [] },
+        dataStore: { 
+            mmb: [], gwd: [],
+            coupons: { mmb: null, gwd: null }
+        },
         onData: null,
+        onCoupon: null,
 
         resolveProductUrl() {
             let url = window.location.href;
@@ -76,8 +81,9 @@
             return url;
         },
 
-        startTracking(callback) {
+        startTracking(callback, couponCallback) {
             this.onData = callback;
+            this.onCoupon = couponCallback;
             const targetUrl = this.resolveProductUrl();
             console.log("[PriceTracker Core] Tracking target:", targetUrl);
             this.fetchSource('gwd', targetUrl);
@@ -104,9 +110,41 @@
                         this.dataStore[source] = history;
                         this.onData?.(source, history);
                     }
+                    // Fetch coupons
+                    this.fetchCoupons(source, targetUrl);
                 },
                 onerror: (err) => console.error(`[PriceTracker Core] Fetch ${source} failed:`, err)
             });
+        },
+
+        fetchCoupons(source, targetUrl) {
+            const isGwd = (source === 'gwd');
+            if (isGwd) return; // Extend GWD coupon logic if needed
+
+            GM_xmlhttpRequest({
+                method: "GET",
+                url: `${CONFIG.MMB_COUPON_API}&url=${encodeURIComponent(targetUrl)}`,
+                headers: { "Referer": CONFIG.REFERERS.MMB },
+                onload: (res) => {
+                    const coupon = this.parseMmbCoupon(res.responseText);
+                    if (coupon) {
+                        this.dataStore.coupons.mmb = coupon;
+                        this.onCoupon?.('mmb', coupon);
+                    }
+                }
+            });
+        },
+
+        parseMmbCoupon(html) {
+            try {
+                // Extract youhui, quanurl from string or simple HTML
+                const youhui = html.match(/youhui\s*=\s*"(.*?)"/)?.[1];
+                const quanUrl = html.match(/quanurl\s*=\s*"(.*?)"/)?.[1] || html.match(/href="(.*?s\.click\.taobao\.com.*?)"/)?.[1];
+                if (youhui && youhui !== "暂无优惠") {
+                    return { text: youhui, url: quanUrl };
+                }
+            } catch (e) { return null; }
+            return null;
         },
 
         parseGwd(jsonStr) {
@@ -137,6 +175,7 @@
             text: '#f8fafc', // Slate 50
             gwd_color: '#6366f1', // Indigo 500
             mmb_color: '#10b981', // Emerald 500
+            coupon: '#f59e0b', // Amber 500
             blur: 'blur(20px) saturate(180%)',
             mute: '#94a3b8', // Slate 400
             border: 'rgba(255, 255, 255, 0.12)'
@@ -220,6 +259,33 @@
             margin-top: 20px; opacity: 0.5; font-weight: 400; 
         }
 
+        /* Promotion UI */
+        .vh-promo-section {
+            margin-top: 24px; padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: none;
+        }
+        .vh-promo-card {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px; padding: 12px 16px;
+            display: flex; align-items: center; gap: 12px;
+            animation: vh-slide-up 0.4s ease-out;
+        }
+        @keyframes vh-slide-up { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+        
+        .vh-promo-icon { font-size: 20px; }
+        .vh-promo-info { flex: 1; }
+        .vh-promo-label { font-size: 10px; color: ${UI_CONFIG.theme.coupon}; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; }
+        .vh-promo-text { font-size: 14px; font-weight: 600; color: #fff; }
+        .vh-promo-btn {
+            background: ${UI_CONFIG.theme.coupon}; color: #000;
+            padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700;
+            text-decoration: none; transition: all 0.3s;
+        }
+        .vh-promo-btn:hover { transform: scale(1.05); filter: brightness(1.1); box-shadow: 0 5px 15px ${UI_CONFIG.theme.coupon}44; }
+    `;
+
     const getChartOption = (data, color, name) => ({
         backgroundColor: 'transparent',
         grid: { top: 40, bottom: 30, left: 45, right: 15 },
@@ -300,6 +366,7 @@
                         </div>
                     </div>
                     <div id="${UI_CONFIG.id.chart}"></div>
+                    <div class="vh-promo-section"></div>
                     <div class="vh-footer">© 2026 Hoàng Tùng • Price Tracker Pro v3.1.2</div>
                 </div>
             `;
@@ -343,6 +410,8 @@
                     clearInterval(checkCore);
                     core.startTracking((source, history) => {
                         if (source === activeSource) this.renderChart(history);
+                    }, (source, coupon) => {
+                        if (source === activeSource) this.renderPromo(coupon);
                     });
                 } else if (++retryCount > maxRetries) {
                     clearInterval(checkCore);
@@ -365,6 +434,25 @@
             const name = activeSource === 'mmb' ? 'Manmanbuy' : 'Gouwudang';
             chartInstance.setOption(getChartOption(data, color, name));
             chartInstance.resize();
+        },
+
+        renderPromo(coupon) {
+            const promoSection = document.querySelector('.vh-promo-section');
+            if (!coupon) {
+                promoSection.style.display = 'none';
+                return;
+            }
+            promoSection.innerHTML = `
+                <div class="vh-promo-card">
+                    <div class="vh-promo-icon">🎁</div>
+                    <div class="vh-promo-info">
+                        <div class="vh-promo-label">Ưu đãi kích hoạt</div>
+                        <div class="vh-promo-text">${coupon.text}</div>
+                    </div>
+                    ${coupon.url ? `<a href="${coupon.url}" target="_blank" class="vh-promo-btn">LẤY MÃ</a>` : ''}
+                </div>
+            `;
+            promoSection.style.display = 'block';
         }
     };
 
