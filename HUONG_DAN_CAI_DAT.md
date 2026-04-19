@@ -13,13 +13,16 @@ Chào mừng bạn! Đây là hướng dẫn giúp bạn cài đặt công cụ 
 
 ## 🐢 Hướng dẫn chi tiết (Từng bước một)
 
-### Bước 1: Cài đặt "Bộ máy chạy script" (Violentmonkey)
-Để chạy được công cụ này, trình duyệt của bạn cần một tiện ích hỗ trợ. Chúng tôi khuyên dùng **Violentmonkey** vì nó nhẹ và bảo mật nhất.
+### Bước 1: Cài đặt "Bộ máy chạy script" (Bắt buộc)
+Để chạy được công cụ này, trình duyệt của bạn cần một tiện ích hỗ trợ. Bạn có thể chọn 1 trong 2 tiện ích phổ biến nhất:
 
-- **Dành cho Chrome, Edge, Cốc Cốc**: 
-  👉 [Tải Violentmonkey trên Chrome Web Store](https://chromewebstore.google.com/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag)
-- **Dành cho Firefox**:
-  👉 [Tải Violentmonkey trên Firefox Add-ons](https://addons.mozilla.org/vi/firefox/addon/violentmonkey/)
+1. **Violentmonkey (Khuyên dùng)**: Nhẹ, mã nguồn mở.
+   - [Tải cho Chrome/Edge/Cốc Cốc](https://chromewebstore.google.com/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag)
+   - [Tải cho Firefox](https://addons.mozilla.org/vi/firefox/addon/violentmonkey/)
+
+2. **Tampermonkey (Ổn định cho MV3)**: Phổ biến nhất thế giới, hỗ trợ tốt các trình duyệt đời mới.
+   - [Tải cho Chrome/Edge/Cốc Cốc](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+   - [Tải cho Firefox](https://addons.mozilla.org/vi/firefox/addon/tampermonkey/)
 
 *(Sau khi vào link, bạn nhấn nút **"Thêm vào Chrome"** hoặc **"Add to Brave/Edge"** và xác nhận).*
 

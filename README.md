@@ -17,9 +17,9 @@ Công cụ theo dõi lịch sử giá mã nguồn mở, bảo mật và thẩm m
 Dành cho bạn nào chưa biết cách cài đặt, hãy làm theo 2 bước đơn giản sau:
 
 ### Bước 1: Cài đặt tiện ích hỗ trợ
-Bạn cần cài bộ máy chạy script tên là **Violentmonkey** vào trình duyệt:
-- [Cài Violentmonkey cho Chrome / Edge / Cốc Cốc](https://chromewebstore.google.com/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag)
-- [Cài Violentmonkey cho Firefox](https://addons.mozilla.org/vi/firefox/addon/violentmonkey/)
+Bạn cần cài bộ máy chạy script (Userscript Manager) vào trình duyệt:
+- **Lựa chọn 1: Violentmonkey (Khuyên dùng)**: [Chrome / Edge / Cốc Cốc](https://chromewebstore.google.com/detail/violentmonkey/jinjaccalgkegednnccohejagnlnfdag) | [Firefox](https://addons.mozilla.org/vi/firefox/addon/violentmonkey/)
+- **Lựa chọn 2: Tampermonkey (Ổn định cho MV3)**: [Chrome / Edge / Cốc Cốc](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | [Firefox](https://addons.mozilla.org/vi/firefox/addon/tampermonkey/)
 
 ### Bước 2: Cài đặt Price Tracker
 Sau khi đã xong Bước 1, bạn nhấn vào link dưới đây để cài đặt script:
