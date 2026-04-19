@@ -53,9 +53,9 @@
                 // Taobao / Tmall Identity Resolution
                 if (hostname.includes('taobao.com') || hostname.includes('tmall.com')) {
                     const hub = window['Hub'];
-                    if (hub?.config && hub.config.get('sku')) {
+                    if (hub && hub.config && hub.config.get('sku')) {
                         const skuId = hub.config.get('sku').skuId;
-                        const itemId = new URLSearchParams(window.location.search).get('id') || window['g_config']?.itemId;
+                        const itemId = new URLSearchParams(window.location.search).get('id') || (window['g_config'] && window['g_config'].itemId);
                         if (skuId && itemId) {
                             url = `https://item.taobao.com/item.htm?id=${itemId}-${skuId}`;
                         }
@@ -63,14 +63,14 @@
                 } 
                 // JD.com Identity Resolution
                 else if (hostname.includes('jd.com')) {
-                    const skuId = window['pageConfig']?.product?.skuid;
+                    const skuId = window['pageConfig'] && window['pageConfig'].product && window['pageConfig'].product.skuid;
                     if (skuId) {
                         url = `https://item.jd.com/${skuId}.html`;
                     }
                 }
                 // 1688.com Identity Resolution
                 else if (hostname.includes('1688.com')) {
-                    const offerId = window['offerConfig']?.offerId || new URLSearchParams(window.location.search).get('id');
+                    const offerId = (window['offerConfig'] && window['offerConfig'].offerId) || new URLSearchParams(window.location.search).get('id');
                     if (offerId) {
                         url = `https://detail.1688.com/offer/${offerId}.html`;
                     }
@@ -108,7 +108,7 @@
                     const history = isGwd ? this.parseGwd(res.responseText) : this.parseMmb(res.responseText);
                     if (history && history.length > 0) {
                         this.dataStore[source] = history;
-                        this.onData?.(source, history);
+                        if (this.onData) this.onData(source, history);
                     }
                     // Fetch coupons
                     this.fetchCoupons(source, targetUrl);
@@ -129,7 +129,7 @@
                     const coupon = this.parseMmbCoupon(res.responseText);
                     if (coupon) {
                         this.dataStore.coupons.mmb = coupon;
-                        this.onCoupon?.('mmb', coupon);
+                        if (this.onCoupon) this.onCoupon('mmb', coupon);
                     }
                 }
             });
@@ -138,8 +138,13 @@
         parseMmbCoupon(html) {
             try {
                 // Extract youhui, quanurl from string or simple HTML
-                const youhui = html.match(/youhui\s*=\s*"(.*?)"/)?.[1];
-                const quanUrl = html.match(/quanurl\s*=\s*"(.*?)"/)?.[1] || html.match(/href="(.*?s\.click\.taobao\.com.*?)"/)?.[1];
+                const youhuiMatch = html.match(/youhui\s*=\s*"(.*?)"/);
+                const youhui = youhuiMatch ? youhuiMatch[1] : null;
+                
+                const quanUrlMatch = html.match(/quanurl\s*=\s*"(.*?)"/);
+                const hrefMatch = html.match(/href="(.*?s\.click\.taobao\.com.*?)"/);
+                const quanUrl = (quanUrlMatch ? quanUrlMatch[1] : null) || (hrefMatch ? hrefMatch[1] : null);
+
                 if (youhui && youhui !== "暂无优惠") {
                     return { text: youhui, url: quanUrl };
                 }
@@ -150,8 +155,9 @@
         parseGwd(jsonStr) {
             try {
                 const data = JSON.parse(jsonStr);
-                return data.store?.[0]?.all_line?.map(i => [new Date(i[0]).getTime(), parseFloat(i[1])]) || [];
-            } catch { return []; }
+                const store = (data && data.store) ? data.store[0] : null;
+                return (store && store.all_line) ? store.all_line.map(i => [new Date(i[0]).getTime(), parseFloat(i[1])]) : [];
+            } catch (e) { return []; }
         },
 
         parseMmb(html) {
@@ -422,7 +428,7 @@
 
         renderCurrentData() {
             const core = window['VHPriceTrackerCore'];
-            if (core?.dataStore[activeSource]?.length > 0) {
+            if (core && core.dataStore && core.dataStore[activeSource] && core.dataStore[activeSource].length > 0) {
                 this.renderChart(core.dataStore[activeSource]);
             }
         },
