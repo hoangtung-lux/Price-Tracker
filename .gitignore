@@ -1,5 +1,15 @@
+# Price Tracker Secrets
 BACKUP_CODE_SACH.txt
-node_modules/
-.agent/
-dist/
+vault_builder.py
+obfuscate.py
+minify.py
+design_system.md
+temp_logic.js
+
+# Environments
 .env
+.venv/
+env/
+venv/
+node_modules/
+.DS_Store
